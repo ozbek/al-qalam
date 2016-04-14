@@ -18,5 +18,5 @@
    along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-    <style name="Theme.Light" parent="Theme.Sherlock.Light" />
+    <style name="Theme.Light" parent="Theme.AppCompat.Light" />
 </resources>

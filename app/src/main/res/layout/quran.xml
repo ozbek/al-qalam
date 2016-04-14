@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
    Copyright 2012 (c) Al-Qalam Project
 
    This file is part of Al-Qalam (uz.efir.alqalam) package.
@@ -21,30 +20,31 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/QuranView"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     android:weightSum="1.0">
 
-        <ListView
-            android:id="@+id/SurahList"
-            android:orientation="vertical"
-            android:layout_width="@dimen/width_zero_dp"
-            android:layout_height="wrap_content"
-            android:scrollingCache="true"
-            android:layout_weight="0.872" />
+    <ListView
+        android:id="@+id/SurahList"
+        android:layout_width="@dimen/width_zero_dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.872"
+        android:orientation="vertical"
+        android:scrollingCache="true" />
 
-        <View android:layout_width="@dimen/width_zero_dp"
-            android:layout_height="match_parent"
-            android:background="@color/separator"
-            android:layout_weight="0.003" />
+    <View
+        android:layout_width="@dimen/width_zero_dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.003"
+        android:background="@color/separator" />
 
-        <ListView
-            android:id="@+id/JuzList"
-            android:orientation="vertical"
-            android:layout_width="@dimen/width_zero_dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:scrollingCache="true"
-            android:layout_weight="0.125" />
+    <ListView
+        android:id="@+id/JuzList"
+        android:layout_width="@dimen/width_zero_dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.125"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical"
+        android:scrollingCache="true" />
 </LinearLayout>

@@ -18,16 +18,15 @@
  */
 package uz.efir.alqalam;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -36,12 +35,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
 
-public class QuranActivity extends AbstractSherlockFragmentActivity {
+public class QuranActivity extends AppCompatActivity {
     private static final String IS_DB_INITIALIZED = "is_database_initialized";
     private Activity mActivity;
-    private ListView gSurahList;
-    private ListView gJuzzList;
-    private String[] gSurahTitles;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,52 +45,54 @@ public class QuranActivity extends AbstractSherlockFragmentActivity {
         setContentView(R.layout.quran);
         mActivity = this;
 
-        gJuzzList = (ListView)findViewById(R.id.JuzList);
-        gJuzzList.setVerticalScrollBarEnabled(false);
-        gJuzzList.setHorizontalScrollBarEnabled(false);
-        String [] juzz_array = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15",
-                "16","17","18","19","20", "21","22","23","24","25","26","27","28","29","30"};
-        gJuzzList.setAdapter(new ArrayAdapter<String>(mActivity, R.layout.quran_juzz, juzz_array));
-        gJuzzList.setDivider(null);
-        gJuzzList.setOnItemClickListener(new OnItemClickListener() {
+        ListView juzList = (ListView) findViewById(R.id.JuzList);
+        assert juzList != null;
+        juzList.setVerticalScrollBarEnabled(false);
+        juzList.setHorizontalScrollBarEnabled(false);
+        String[] juzArray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
+                "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
+        juzList.setAdapter(new ArrayAdapter<>(mActivity, R.layout.quran_juzz, juzArray));
+        juzList.setDivider(null);
+        juzList.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view,
-                    final int index, long order) {
+                                    final int index, long order) {
                 Intent quranIntent = new Intent(mActivity, SurahActivity.class);
-                quranIntent.putExtra("sNumber", Utils.JUZZ_INDEXES[index][0]-1);
+                quranIntent.putExtra("sNumber", Utils.JUZZ_INDEXES[index][0] - 1);
                 quranIntent.putExtra("aNumber", Utils.JUZZ_INDEXES[index][1]);
                 startActivity(quranIntent);
             }
         });
 
-        gSurahTitles = getResources().getStringArray(R.array.surah_titles);
+        String[] surahTitles = getResources().getStringArray(R.array.surah_titles);
         QuranAdapter quranAdapter = new QuranAdapter(mActivity);
         QuranIconifiedText qit;
 
         // check which Surah's Arabic Text is already downloaded
         int j = 0;
-        for (int i=0; i < Utils.NUMBER_OF_SURAHS ; i++) {
-            if (i+1 == Utils.MADANI_SURAH_INDEX[j]) {
-                qit = new QuranIconifiedText(i, gSurahTitles[i], i+1,
+        for (int i = 0; i < Utils.NUMBER_OF_SURAHS; i++) {
+            if (i + 1 == Utils.MADANI_SURAH_INDEX[j]) {
+                qit = new QuranIconifiedText(i, surahTitles[i], i + 1,
                         getString(R.string.surah_madani, Utils.SURAH_NUMBER_OF_AYATS[i]));
                 j++;
             } else {
-                qit = new QuranIconifiedText(i, gSurahTitles[i], i+1,
+                qit = new QuranIconifiedText(i, surahTitles[i], i + 1,
                         getString(R.string.surah_makki, Utils.SURAH_NUMBER_OF_AYATS[i]));
             }
             quranAdapter.addItem(qit);
         }
 
-        gSurahList = (ListView)findViewById(R.id.SurahList);
-        gSurahList.setVerticalScrollBarEnabled(false);
-        gSurahList.setHorizontalScrollBarEnabled(false);
-        gSurahList.setAdapter(quranAdapter);
-        gSurahList.setCacheColorHint(00000000);
-        gSurahList.setDivider(null);
-        gSurahList.setOnItemClickListener(new OnItemClickListener() {
+        ListView surahList = (ListView) findViewById(R.id.SurahList);
+        assert surahList != null;
+        surahList.setVerticalScrollBarEnabled(false);
+        surahList.setHorizontalScrollBarEnabled(false);
+        surahList.setAdapter(quranAdapter);
+        surahList.setCacheColorHint(0);
+        surahList.setDivider(null);
+        surahList.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view,
-                    final int index, long order) {
+                                    final int index, long order) {
                 Intent quranIntent = new Intent(mActivity, SurahActivity.class);
                 quranIntent.putExtra("sNumber", index);
                 quranIntent.putExtra("aNumber", 0);
@@ -107,14 +105,11 @@ public class QuranActivity extends AbstractSherlockFragmentActivity {
         if (!prefs.getBoolean(IS_DB_INITIALIZED, false)) {
             new AsyncInitDatabase().execute();
         }
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(false);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getSupportMenuInflater();
+        MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main, menu);
 
         return super.onCreateOptionsMenu(menu);
@@ -122,7 +117,7 @@ public class QuranActivity extends AbstractSherlockFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.menu_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
@@ -131,7 +126,7 @@ public class QuranActivity extends AbstractSherlockFragmentActivity {
     }
 
     /**
-     * Initializes the Qur'an database in the background
+     * Initializes the Quran database in the background
      */
     private class AsyncInitDatabase extends AsyncTask<Void, Void, Void> {
         private ProgressDialog mProgressDialog;
@@ -153,7 +148,7 @@ public class QuranActivity extends AbstractSherlockFragmentActivity {
         }
 
         @Override
-        protected void onPostExecute(Void params){
+        protected void onPostExecute(Void params) {
             mAlQalamDatabase.close();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             prefs.edit().putBoolean(IS_DB_INITIALIZED, true).commit();
